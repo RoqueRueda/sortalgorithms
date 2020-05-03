@@ -6,9 +6,12 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
+import com.roque.rueda.soralgorithms.R
 import kotlin.random.Random
 
-const val DEFAULT_NUMBER_SIZE = 10
+const val DEFAULT_NUMBER_SIZE = 500
 
 class LineArrayView @JvmOverloads constructor(
     ctx: Context,
@@ -24,9 +27,8 @@ class LineArrayView @JvmOverloads constructor(
         }
 
     private val paint = Paint().apply {
-        color = Color.RED
-        flags = Paint.ANTI_ALIAS_FLAG
-        style = Paint.Style.STROKE
+        color = Color.BLACK
+        style = Paint.Style.FILL_AND_STROKE
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -36,15 +38,23 @@ class LineArrayView @JvmOverloads constructor(
             return
         }
 
-        val lineWidth = width.toFloat() / linesToDraw.size.toFloat()
+        val lineWidth = width / linesToDraw.size.toFloat()
         paint.strokeWidth = lineWidth
 
         linesToDraw.forEachIndexed { index, line ->
+            paint.color = getColorForLine(line, linesToDraw.size)
             val startX = lineWidth * index + 1
             val startY = 0f
             val endX = lineWidth * index + 1
             val endY = line.toFloat()
             canvas.drawLine(startX, startY, endX, endY, paint)
         }
+    }
+
+    private fun getColorForLine(line: Int, size: Int): Int {
+        val percentage = (line * 100 / size) / 100f
+        val startColor = ContextCompat.getColor(context, R.color.colorStart)
+        val endColor = ContextCompat.getColor(context, R.color.colorEnd)
+        return ColorUtils.blendARGB(startColor, endColor, percentage)
     }
 }

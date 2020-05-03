@@ -39,8 +39,13 @@ class MainFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.lines.observe(viewLifecycleOwner, Observer { renderLines(it) })
-        viewModel.calculateRandomArray()
         bindingView.random.setOnClickListener { viewModel.calculateRandomArray() }
+        bindingView.sort.setOnClickListener { viewModel.sortArray() }
+
+        if (savedInstanceState == null) {
+            viewModel.calculateRandomArray()
+        }
+
     }
 
     private fun renderLines(newArray: IntArray?) {
