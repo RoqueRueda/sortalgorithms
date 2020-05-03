@@ -40,6 +40,7 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.lines.observe(viewLifecycleOwner, Observer { renderLines(it) })
         viewModel.calculateRandomArray()
+        bindingView.random.setOnClickListener { viewModel.calculateRandomArray() }
     }
 
     private fun renderLines(newArray: IntArray?) {
