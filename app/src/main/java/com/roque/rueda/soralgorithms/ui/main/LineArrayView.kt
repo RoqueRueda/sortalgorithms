@@ -26,6 +26,7 @@ class LineArrayView @JvmOverloads constructor(
     private val paint = Paint().apply {
         color = Color.RED
         flags = Paint.ANTI_ALIAS_FLAG
+        style = Paint.Style.STROKE
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -35,10 +36,13 @@ class LineArrayView @JvmOverloads constructor(
             return
         }
 
+        val lineWidth = width.toFloat() / linesToDraw.size.toFloat()
+        paint.strokeWidth = lineWidth
+
         linesToDraw.forEachIndexed { index, line ->
-            val startX = 0f + index
+            val startX = lineWidth * index + 1
             val startY = 0f
-            val endX = 0f + index
+            val endX = lineWidth * index + 1
             val endY = line.toFloat()
             canvas.drawLine(startX, startY, endX, endY, paint)
         }
